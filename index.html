@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrev0</title>
+
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="stylesheet" href="assets/styles/static.css">
+    <link rel="stylesheet" href="assets/styles/animations.css">
+
+    <meta name="description" content="Personal website of Andrev0">
+    <meta name="author" content="Andrev0">
+    <meta name="theme-color" content="#8B5CF6">
+    <meta property="og:title" content="Andrev0">
+    <meta property="og:description" content="Personal website of Andrev0">
+    <meta property="og:type" content="website">
+    <meta name="keywords" content="portfolio, developer, web development">
+
+    <script src="https://kit.fontawesome.com/584144eaca.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Alert Box -->
+    <div class="alert">
+        <h1>Turn on the JavaScript on your browser, to see content of this website</h1>
+        <h1>Włącz JavaScript w swojej przeglądarce, aby zobaczyć zawartość tej strony</h1>
+    </div>
+
+    <div class="website">
+        <!-- Navbar -->
+        <div class="navbar-top">
+            <div class="left">
+                <a href="#home">
+                    <i class="fa-solid fa-house"></i>
+                    <span data-key="$home"></span>
+                </a>
+                <a href="#services">
+                    <i class="fa-solid fa-server"></i>
+                    <span data-key="$services"></span>
+                </a>
+                <a href="#projects">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span data-key="$projects"></span>
+                </a>
+                <a href="#opinions">
+                    <i class="fa-solid fa-star"></i>
+                    <span data-key="$opinions"></span>
+                </a>
+                <a href="#contact">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span data-key="$contact"></span>
+                </a>
+
+                <div class="flags">
+                    <a href="#" onclick="setLanguage('pl')"><img src="assets/flags/poland.png" alt="PL"></a>
+                    <a href="#" onclick="setLanguage('en')"><img src="assets/flags/usa.png" alt="EN"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Home / Hero Section -->
+            <div class="home" id="home">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    <span data-key="$hero_badge"></span>
+                </div>
+                <h1 class="hero-title">Andrev<span class="accent">0</span></h1>
+                <p class="hero-subtitle" data-key="$hero_subtitle"></p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn-primary">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span data-key="$hero_cta1"></span>
+                    </a>
+                    <a href="#projects" class="btn-secondary">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span data-key="$hero_cta2"></span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div class="services" id="services">
+                <i class="fa-solid fa-server"></i>
+                <h1 data-key="$services"></h1>
+
+                <div class="services-grid">
+                    <div class="services-item fade-in">
+                        <i class="fa-solid fa-computer"></i>
+                        <h2 data-key="$service1"></h2>
+                        <p data-key="$service1_desc"></p>
+                    </div>
+
+                    <div class="services-item fade-in">
+                        <i class="fa-solid fa-globe"></i>
+                        <h2 data-key="$service2"></h2>
+                        <p data-key="$service2_desc"></p>
+                    </div>
+
+                    <div class="services-item fade-in">
+                        <i class="fa-solid fa-cogs"></i>
+                        <h2 data-key="$service3"></h2>
+                        <p data-key="$service3_desc"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="projects" id="projects">
+                <i class="fa-solid fa-briefcase"></i>
+                <h1 data-key="$projects"></h1>
+                <div class="projects-empty">
+                    <i class="fa-solid fa-rocket"></i>
+                    <p data-key="$projects_empty">Coming soon...</p>
+                </div>
+            </div>
+
+            <!-- Opinions Section -->
+            <div class="opinions" id="opinions">
+                <i class="fa-solid fa-star"></i>
+                <h1 data-key="$opinions"></h1>
+                <div class="opinions-grid" id="opinions-grid">
+                    <!-- Populated dynamically from JSON -->
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact" id="contact">
+                <i class="fa-solid fa-envelope"></i>
+                <h1 data-key="$contact"></h1>
+                <p>
+                    <i class="fa-solid fa-envelope"></i>
+                    <span data-key="$contact1"></span>
+                    <a href="mailto:loksy0.a@gmail.com">loksy0.a@gmail.com</a>
+                </p>
+                <p data-key="$contact2"></p>
+
+                <ul>
+                    <li>
+                        <a href="https://github.com/Andrev0dev" target="_blank">
+                            <i class="fa-brands fa-github"></i>
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="navigator.clipboard.writeText('andrev0'); this.querySelector('span') && (this.querySelector('span').textContent='Copied!')">
+                            <i class="fa-brands fa-discord"></i>
+                            Discord: andrev0
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>&copy; 2026 Andrev0. All rights reserved.</p>
+                <p>Designed and developed by Andrev0.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/javascript/language.js"></script>
+</body>
+</html>

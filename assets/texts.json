@@ -1,0 +1,124 @@
+{
+    "$home": {
+        "en": "Home",
+        "pl": "Strona główna"
+    },
+    "$services": {
+        "en": "Services",
+        "pl": "Usługi"
+    },
+    "$service1": {
+        "en": "Computer Assistance",
+        "pl": "Pomoc komputerowa"
+    },
+    "$service1_desc": {
+        "en": "I offer assistance with computers and phones. I handle the repair of damaged devices, cleaning of equipment, installation of systems, and solving technical problems.",
+        "pl": "Oferuję pomoc z komputerami oraz telefonami. Zajmuję się naprawą uszkodzonych urządzeń, czyszczeniem sprzętu, instalacją systemów oraz rozwiązywaniem problemów technicznych."
+    },
+    "$service2": {
+        "en": "Web Development",
+        "pl": "Tworzenie stron internetowych"
+    },
+    "$service2_desc": {
+        "en": "I create modern websites that comply with current standards. I care about aesthetics, speed, and responsiveness across different devices.",
+        "pl": "Tworzę nowoczesne strony internetowe zgodne z aktualnymi standardami. Dbam o estetykę, szybkość działania oraz dopasowanie do różnych urządzeń."
+    },
+    "$service3": {
+        "en": "System Administration and Process Automation",
+        "pl": "Administracja systemami oraz automatyzacja procesów"
+    },
+    "$service3_desc": {
+        "en": "I offer system administration and process automation services. I help manage IT infrastructure and databases, automate business processes, and optimize network performance.",
+        "pl": "Oferuję usługi administracyjne związane z zarządzaniem systemami informatycznymi i bazami danych. Pomagam w konfiguracji, monitorowaniu oraz utrzymaniu infrastruktury IT, a także automatyzacją procesów biznesowych oraz optymalizacją działania sieci."
+    },
+    "$projects": {
+        "en": "Projects",
+        "pl": "Projekty"
+    },
+    "$opinions": {
+        "en": "Client Reviews",
+        "pl": "Opinie klientów"
+    },
+    "$contact": {
+        "en": "Contact",
+        "pl": "Kontakt"
+    },
+    "$contact1": {
+        "en": "You can contact me via email at",
+        "pl": "Możesz się ze mną skontaktować przez email na"
+    },
+    "$contact2": {
+        "en": "or through my social media profiles:",
+        "pl": "lub przez moje profile w mediach społecznościowych:"
+    },
+    "$hero_badge": {
+        "en": "Available for new projects",
+        "pl": "Dostępny na nowe projekty"
+    },
+    "$hero_subtitle": {
+        "en": "Modern equipment for the automation of your digital presence. Building fast, clean websites and solving technical problems.",
+        "pl": "Nowoczesne podejście do automatyzacji Twojej obecności cyfrowej. Tworzę szybkie, czyste strony i rozwiązuję problemy techniczne."
+    },
+    "$hero_cta1": {
+        "en": "Get Started",
+        "pl": "Zacznij"
+    },
+    "$hero_cta2": {
+        "en": "View Projects",
+        "pl": "Zobacz projekty"
+    },
+    "$opinions_data": {
+        "en": [
+            {
+                "name": "Marta Kowalska",
+                "role": "Small Business Owner",
+                "text": "Andrev0 created a beautiful website for my bakery. The whole process was smooth, communication was great, and the result exceeded my expectations. Highly recommended!",
+                "stars": 5
+            },
+            {
+                "name": "Tomasz Wiśniewski",
+                "role": "Freelance Photographer",
+                "text": "Professional approach and excellent technical skills. My portfolio site loads incredibly fast and looks stunning on all devices. Will definitely work together again.",
+                "stars": 5
+            },
+            {
+                "name": "Anna Nowak",
+                "role": "Startup Founder",
+                "text": "Quick turnaround, fair pricing, and genuinely cares about the quality of work. Fixed all our server issues within hours. A reliable tech partner.",
+                "stars": 5
+            },
+            {
+                "name": "Paweł Zieliński",
+                "role": "Office Manager",
+                "text": "Our company needed help with system administration and process automation. Andrev0 delivered exactly what we needed — efficient, clean solutions that saved us hours every week.",
+                "stars": 4
+            }
+        ],
+        "pl": [
+            {
+                "name": "Marta Kowalska",
+                "role": "Właścicielka małej firmy",
+                "text": "Andrev0 stworzył piękną stronę dla mojej piekarni. Cały proces przebiegł sprawnie, komunikacja była świetna, a efekt przeszedł moje oczekiwania. Gorąco polecam!",
+                "stars": 5
+            },
+            {
+                "name": "Tomasz Wiśniewski",
+                "role": "Fotograf freelancer",
+                "text": "Profesjonalne podejście i doskonałe umiejętności techniczne. Moje portfolio ładuje się niesamowicie szybko i wygląda świetnie na wszystkich urządzeniach. Na pewno będziemy współpracować ponownie.",
+                "stars": 5
+            },
+            {
+                "name": "Anna Nowak",
+                "role": "Założycielka startupu",
+                "text": "Szybka realizacja, uczciwe ceny i naprawdę dba o jakość pracy. Naprawił wszystkie nasze problemy z serwerem w ciągu kilku godzin. Niezawodny partner technologiczny.",
+                "stars": 5
+            },
+            {
+                "name": "Paweł Zieliński",
+                "role": "Kierownik biura",
+                "text": "Nasza firma potrzebowała pomocy z administracją systemami i automatyzacją procesów. Andrev0 dostarczył dokładnie to, czego potrzebowaliśmy — wydajne, czyste rozwiązania, które oszczędzają nam godziny każdego tygodnia.",
+                "stars": 4
+            }
+        ]
+    }
+}
