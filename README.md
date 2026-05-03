@@ -1,21 +1,21 @@
-# 🟣 Andrev0 — Portfolio
+# 🟣 Andrev0 - Portfolio
 
 Osobista strona wizytówkowa / portfolio w stylu **clean** z fioletowym akcentem kolorystycznym.
 
-Statyczna strona HTML/CSS/JS — bez frameworków, bez buildów, zero zależności do instalacji.
+Statyczna strona HTML/CSS/JS - bez frameworków, bez buildów, zero zależności do instalacji.
 
 ---
 
 ## ✨ Funkcje
 
-- **Wielojęzyczność (PL / EN)** — wszystkie teksty ładowane dynamicznie z `texts.json`, przełączanie jednym kliknięciem flagi
-- **Sekcja Hero** — animowany badge dostępności, duży heading z akcentem, przyciski CTA
-- **Usługi** — karty z ikonami, hover z fioletowym top-borderem i cieniem
-- **Projekty** — placeholder „coming soon" gotowy do rozbudowy
-- **Opinie klientów** — karty renderowane dynamicznie z JSON-a (gwiazdki, cytat, avatar z inicjałami, rola)
-- **Kontakt** — email + linki do GitHub / Discord (clipboard copy)
-- **Responsywność** — mobilny navbar z samymi ikonami, siatki przełączają się na jednokolumnowe
-- **Animacje** — fade-in przy scrollu (IntersectionObserver), float glow, pulse dot
+- **Wielojęzyczność (PL / EN)** - wszystkie teksty ładowane dynamicznie z `texts.json`, przełączanie jednym kliknięciem flagi
+- **Sekcja Hero** - animowany badge dostępności, duży heading z akcentem, przyciski CTA
+- **Usługi** - karty z ikonami, hover z fioletowym top-borderem i cieniem
+- **Projekty** - placeholder „coming soon" gotowy do rozbudowy
+- **Opinie klientów** - karty renderowane dynamicznie z JSON-a (gwiazdki, cytat, avatar z inicjałami, rola)
+- **Kontakt** - email + linki do GitHub / Discord (clipboard copy)
+- **Responsywność** - mobilny navbar z samymi ikonami, siatki przełączają się na jednokolumnowe
+- **Animacje** - fade-in przy scrollu (IntersectionObserver), float glow, pulse dot
 
 ---
 
@@ -30,7 +30,7 @@ Statyczna strona HTML/CSS/JS — bez frameworków, bez buildów, zero zależnoś
 │   ├── texts.json                # Wszystkie teksty PL/EN + dane opinii
 │   ├── styles/
 │   │   ├── static.css            # Kompletny arkusz stylów
-│   │   └── animations.css        # (rozszerzenie — animacje w static.css)
+│   │   └── animations.css        # (rozszerzenie - animacje w static.css)
 │   ├── javascript/
 │   │   └── language.js           # System języków + renderowanie opinii + scroll anim
 │   └── flags/
@@ -96,7 +96,7 @@ W HTML odwołujesz się przez atrybut `data-key="$klucz"`.
 
 ### Opinie klientów
 
-W `texts.json` pod kluczem `$opinions_data` — tablica obiektów per język:
+W `texts.json` pod kluczem `$opinions_data` - tablica obiektów per język:
 
 ```json
 {
@@ -107,7 +107,7 @@ W `texts.json` pod kluczem `$opinions_data` — tablica obiektów per język:
 }
 ```
 
-Dodaj/usuń wpisy — karty wyrenderują się automatycznie.
+Dodaj/usuń wpisy - karty wyrenderują się automatycznie.
 
 ---
 
