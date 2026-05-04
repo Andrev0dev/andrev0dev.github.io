@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrev0 — Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --border: #2a2a3a;
+  --text: #e8e8f0;
+  --text2: #8888a0;
+  --accent: #8B5CF6;
+  --accent2: #06b6d4;
+  --glow: rgba(139, 92, 246, 0.15);
+  --glow2: rgba(6, 182, 212, 0.15);
+  --font: 'Space Grotesk', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--accent); color: white; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentHue": 270,
+  "accentSecondaryHue": 360,
+  "gridVisible": false,
+  "particleCount": 40,
+  "language": "pl"
+}/*EDITMODE-END*/;
+
+// ─── Translations ───
+const T = {
+  pl: {
+    nav: ['Start', 'O mnie', 'Usługi', 'Projekty', 'Opinie', 'Kontakt'],
+    heroSub: 'Backend Developer',
+    heroDesc: 'Tworzę wydajne i skalowalne systemy backendowe. Solidna architektura, czyste API, niezawodna infrastruktura.',
+    heroCta1: 'Napisz do mnie',
+    heroCta2: 'Moje projekty',
+    aboutTitle: 'O mnie',
+    aboutText: 'Backend developer z pasją do tworzenia solidnych systemów. Specjalizuję się w projektowaniu API, bazach danych i architekturze serwerowej. Każdy projekt traktuję jak wyzwanie inżynieryjne — kod ma być czysty, wydajny i łatwy w utrzymaniu.',
+    aboutStats: [['Projekty', '10+'], ['Technologie', '8+'], ['Kawa dziennie', '∞']],
+    servicesTitle: 'Usługi',
+    services: [
+      { icon: '{ }', title: 'REST API', desc: 'Projektowanie i budowa skalowalnych interfejsów API.' },
+      { icon: '⛁', title: 'Bazy danych', desc: 'Modelowanie danych, optymalizacja zapytań, migracje.' },
+      { icon: '⚙', title: 'Infrastruktura', desc: 'Konfiguracja serwerów, CI/CD, konteneryzacja.' },
+      { icon: '🔒', title: 'Bezpieczeństwo', desc: 'Autoryzacja, uwierzytelnianie, audyt bezpieczeństwa.' },
+    ],
+    projectsTitle: 'Projekty',
+    projects: [
+      { title: 'API Gateway', desc: 'Centralny punkt wejścia dla mikroserwisów z rate-limitingiem i auth.', tags: ['Node.js', 'Redis', 'Docker'] },
+      { title: 'Task Queue System', desc: 'System kolejkowania zadań z priorytetami i retry logic.', tags: ['Python', 'RabbitMQ', 'PostgreSQL'] },
+      { title: 'Auth Service', desc: 'Mikroserwis uwierzytelniania z JWT i OAuth2.', tags: ['Go', 'gRPC', 'MongoDB'] },
+    ],
+    opinionsTitle: 'Opinie',
+    opinions: [
+      { text: 'Świetna robota! API działa bez zarzutu, dokumentacja na medal.', author: 'Jan K.', role: 'CTO, StartupXYZ' },
+      { text: 'Profesjonalne podejście, terminowość i czytelny kod. Polecam!', author: 'Anna M.', role: 'PM, AgencjaWeb' },
+    ],
+    contactTitle: 'Kontakt',
+    contactDesc: 'Masz pomysł na projekt? Napisz do mnie!',
+    contactCta: 'Wyślij maila',
+    footer: '© 2026 Andrev0. Wszelkie prawa zastrzeżone.',
+  },
+  en: {
+    nav: ['Home', 'About', 'Services', 'Projects', 'Opinions', 'Contact'],
+    heroSub: 'Backend Developer',
+    heroDesc: 'I build efficient, scalable backend systems. Solid architecture, clean APIs, reliable infrastructure.',
+    heroCta1: 'Get in touch',
+    heroCta2: 'My projects',
+    aboutTitle: 'About me',
+    aboutText: 'Backend developer passionate about building robust systems. I specialize in API design, databases, and server architecture. Every project is an engineering challenge — code should be clean, performant, and maintainable.',
+    aboutStats: [['Projects', '10+'], ['Technologies', '8+'], ['Coffee/day', '∞']],
+    servicesTitle: 'Services',
+    services: [
+      { icon: '{ }', title: 'REST API', desc: 'Design and build scalable API interfaces.' },
+      { icon: '⛁', title: 'Databases', desc: 'Data modeling, query optimization, migrations.' },
+      { icon: '⚙', title: 'Infrastructure', desc: 'Server config, CI/CD, containerization.' },
+      { icon: '🔒', title: 'Security', desc: 'Authorization, authentication, security audits.' },
+    ],
+    projectsTitle: 'Projects',
+    projects: [
+      { title: 'API Gateway', desc: 'Central entry point for microservices with rate-limiting and auth.', tags: ['Node.js', 'Redis', 'Docker'] },
+      { title: 'Task Queue System', desc: 'Job queuing system with priorities and retry logic.', tags: ['Python', 'RabbitMQ', 'PostgreSQL'] },
+      { title: 'Auth Service', desc: 'Authentication microservice with JWT and OAuth2.', tags: ['Go', 'gRPC', 'MongoDB'] },
+    ],
+    opinionsTitle: 'Opinions',
+    opinions: [
+      { text: 'Great work! The API runs flawlessly, documentation is top-notch.', author: 'Jan K.', role: 'CTO, StartupXYZ' },
+      { text: 'Professional approach, on-time delivery, and clean code. Recommended!', author: 'Anna M.', role: 'PM, AgencjaWeb' },
+    ],
+    contactTitle: 'Contact',
+    contactDesc: 'Have a project idea? Get in touch!',
+    contactCta: 'Send an email',
+    footer: '© 2026 Andrev0. All rights reserved.',
+  }
+};
+
+// ─── 3D Mouse tracker ───
+function useMouse() {
+  const [pos, setPos] = useState({ x: 0.5, y: 0.5 });
+  useEffect(() => {
+    const h = (e) => setPos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
+    window.addEventListener('mousemove', h);
+    return () => window.removeEventListener('mousemove', h);
+  }, []);
+  return pos;
+}
+
+// ─── Intersection Observer hook ───
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
+// ─── Animated grid background ───
+function GridBG({ visible, accentHue }) {
+  if (!visible) return null;
+  const c = `oklch(0.6 0.15 ${accentHue})`;
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.08 }}>
+      <svg width="100%" height="100%">
+        <defs>
+          <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke={c} strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+    </div>
+  );
+}
+
+// ─── Floating 3D particles ───
+function Particles({ count, mouse, hue1, hue2 }) {
+  const particles = useRef([]);
+  if (particles.current.length === 0) {
+    for (let i = 0; i < 60; i++) {
+      particles.current.push({
+        x: Math.random() * 100, y: Math.random() * 100,
+        size: 2 + Math.random() * 4, speed: 0.3 + Math.random() * 0.7,
+        hue: Math.random() > 0.5 ? hue1 : hue2, opacity: 0.15 + Math.random() * 0.35,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 50);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+      {particles.current.slice(0, count).map((p, i) => {
+        const t = tick * 0.02;
+        const mx = (mouse.x - 0.5) * 20 * (p.speed);
+        const my = (mouse.y - 0.5) * 20 * (p.speed);
+        const fx = p.x + Math.sin(t * p.speed + p.phase) * 3 + mx;
+        const fy = p.y + Math.cos(t * p.speed + p.phase) * 2 + my;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${fx}%`, top: `${fy}%`,
+            width: p.size, height: p.size,
+            borderRadius: '50%',
+            background: `oklch(0.7 0.2 ${p.hue})`,
+            opacity: p.opacity,
+            filter: `blur(${p.size > 4 ? 1 : 0}px)`,
+            transition: 'left 0.3s ease-out, top 0.3s ease-out',
+          }} />
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── 3D tilt card ───
+function TiltCard({ children, style, className }) {
+  const ref = useRef(null);
+  const [transform, setTransform] = useState('perspective(800px) rotateX(0deg) rotateY(0deg)');
+  const [glare, setGlare] = useState({ x: 50, y: 50, opacity: 0 });
+
+  const handleMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rotY = (x - 0.5) * 16;
+    const rotX = (0.5 - y) * 16;
+    setTransform(`perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`);
+    setGlare({ x: x * 100, y: y * 100, opacity: 0.12 });
+  };
+  const handleLeave = () => {
+    setTransform('perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)');
+    setGlare({ x: 50, y: 50, opacity: 0 });
+  };
+
+  return (
+    <div ref={ref} onMouseMove={handleMove} onMouseLeave={handleLeave}
+      style={{ transform, transition: 'transform 0.2s ease-out', transformStyle: 'preserve-3d', ...style }} className={className}>
+      {children}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 'inherit', pointerEvents: 'none',
+        background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,${glare.opacity}), transparent 60%)`,
+        transition: 'opacity 0.2s',
+      }} />
+    </div>
+  );
+}
+
+// ─── Section wrapper ───
+function Section({ id, children, style }) {
+  const [ref, visible] = useInView();
+  return (
+    <section id={id} ref={ref} style={{
+      maxWidth: 1100, margin: '0 auto', padding: '100px 24px',
+      opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
+      transition: 'opacity 0.7s ease-out, transform 0.7s ease-out', ...style,
+    }}>
+      {children}
+    </section>
+  );
+}
+
+function SectionTitle({ children, accentHue }) {
+  return (
+    <h2 style={{
+      fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 700, marginBottom: 48,
+      display: 'flex', alignItems: 'center', gap: 16,
+    }}>
+      <span style={{ width: 40, height: 3, background: `oklch(0.65 0.2 ${accentHue})`, borderRadius: 2 }}></span>
+      {children}
+    </h2>
+  );
+}
+
+// ─── NAV ───
+function Nav({ t, lang, setLang, accentHue }) {
+  const ids = ['home', 'about', 'services', 'projects', 'opinions', 'contact'];
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+      background: scrolled ? 'rgba(10,10,15,0.85)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(16px)' : 'none',
+      borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
+      transition: 'all 0.3s',
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <a href="#home" style={{ fontFamily: 'var(--mono)', fontWeight: 700, fontSize: 20, color: `oklch(0.7 0.2 ${accentHue})` }}>
+          &lt;Andrev0 /&gt;
+        </a>
+        <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+          {t.nav.map((label, i) => (
+            <a key={i} href={`#${ids[i]}`} style={{ fontSize: 14, color: 'var(--text2)', fontWeight: 500, transition: 'color 0.2s' }}
+              onMouseEnter={e => e.target.style.color = `oklch(0.7 0.2 ${accentHue})`}
+              onMouseLeave={e => e.target.style.color = 'var(--text2)'}>{label}</a>
+          ))}
+          <button onClick={() => setLang(lang === 'pl' ? 'en' : 'pl')} style={{
+            background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6,
+            padding: '4px 10px', color: 'var(--text2)', fontSize: 12, fontFamily: 'var(--mono)',
+            cursor: 'pointer', transition: 'all 0.2s',
+          }}>{lang.toUpperCase()}</button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ─── HERO ───
+function Hero({ t, mouse, accentHue, accentHue2 }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  const c2 = `oklch(0.65 0.2 ${accentHue2})`;
+  return (
+    <section id="home" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '120px 24px 80px' }}>
+      {/* Large floating 3D shapes */}
+      <div style={{
+        position: 'absolute', width: 300, height: 300, borderRadius: 60, border: `1px solid ${c1}`,
+        opacity: 0.08, top: '10%', right: '10%',
+        transform: `perspective(600px) rotateX(${(mouse.y - 0.5) * 20}deg) rotateY(${(mouse.x - 0.5) * 20}deg)`,
+        transition: 'transform 0.3s ease-out',
+      }} />
+      <div style={{
+        position: 'absolute', width: 200, height: 200, borderRadius: '50%', border: `1px solid ${c2}`,
+        opacity: 0.06, bottom: '15%', left: '8%',
+        transform: `perspective(600px) rotateX(${(mouse.y - 0.5) * -15}deg) rotateY(${(mouse.x - 0.5) * -15}deg)`,
+        transition: 'transform 0.3s ease-out',
+      }} />
+      <div style={{
+        position: 'absolute', width: 120, height: 120, border: `1px solid ${c1}`,
+        opacity: 0.1, top: '30%', left: '20%',
+        transform: `perspective(600px) rotateX(${(mouse.y - 0.5) * 25}deg) rotateY(${(mouse.x - 0.5) * 25}deg) rotate(45deg)`,
+        transition: 'transform 0.3s ease-out',
+      }} />
+
+      <div style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: 700 }}>
+        {/* Terminal-style greeting */}
+        <div style={{
+          fontFamily: 'var(--mono)', fontSize: 'clamp(13px, 2vw, 15px)', color: c2,
+          marginBottom: 20, display: 'inline-flex', alignItems: 'center', gap: 8,
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          padding: '8px 20px', borderRadius: 100,
+        }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }}></span>
+          {t.heroSub}
+        </div>
+
+        <h1 style={{
+          fontSize: 'clamp(48px, 10vw, 96px)', fontWeight: 700, lineHeight: 1.05, marginBottom: 24,
+          background: `linear-gradient(135deg, var(--text) 0%, ${c1} 50%, ${c2} 100%)`,
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+        }}>
+          Andrev0
+        </h1>
+
+        <p style={{ fontSize: 'clamp(16px, 2.5vw, 20px)', color: 'var(--text2)', maxWidth: 540, margin: '0 auto 40px', textWrap: 'pretty' }}>
+          {t.heroDesc}
+        </p>
+
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="#contact" style={{
+            padding: '14px 32px', borderRadius: 10, fontWeight: 600, fontSize: 15,
+            background: `linear-gradient(135deg, ${c1}, ${c2})`,
+            color: '#fff', transition: 'transform 0.2s, box-shadow 0.2s',
+            boxShadow: `0 4px 24px ${c1}44`,
+          }}
+            onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = `0 8px 32px ${c1}66`; }}
+            onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = `0 4px 24px ${c1}44`; }}
+          >{t.heroCta1}</a>
+          <a href="#projects" style={{
+            padding: '14px 32px', borderRadius: 10, fontWeight: 600, fontSize: 15,
+            background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text)',
+            transition: 'transform 0.2s, border-color 0.2s',
+          }}
+            onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; e.target.style.borderColor = c1; }}
+            onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.borderColor = 'var(--border)'; }}
+          >{t.heroCta2}</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── ABOUT ───
+function About({ t, accentHue }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  return (
+    <Section id="about">
+      <SectionTitle accentHue={accentHue}>{t.aboutTitle}</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 40 }}>
+        <p style={{ fontSize: 18, color: 'var(--text2)', maxWidth: 640, lineHeight: 1.8, textWrap: 'pretty' }}>{t.aboutText}</p>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          {t.aboutStats.map(([label, val], i) => (
+            <TiltCard key={i} style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderRadius: 16, padding: '28px 36px', position: 'relative', overflow: 'hidden', flex: '1 1 140px',
+            }}>
+              <div style={{ fontSize: 36, fontWeight: 700, color: c1, fontFamily: 'var(--mono)' }}>{val}</div>
+              <div style={{ fontSize: 14, color: 'var(--text2)', marginTop: 4 }}>{label}</div>
+            </TiltCard>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+// ─── SERVICES ───
+function Services({ t, accentHue, accentHue2 }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  const c2 = `oklch(0.65 0.2 ${accentHue2})`;
+  return (
+    <Section id="services">
+      <SectionTitle accentHue={accentHue}>{t.servicesTitle}</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
+        {t.services.map((s, i) => (
+          <TiltCard key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 16, padding: 32, position: 'relative', overflow: 'hidden', cursor: 'default',
+          }}>
+            <div style={{
+              width: 52, height: 52, borderRadius: 14,
+              background: i % 2 === 0 ? `${c1}18` : `${c2}18`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 22, marginBottom: 20, fontFamily: 'var(--mono)',
+              color: i % 2 === 0 ? c1 : c2,
+            }}>{s.icon}</div>
+            <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>{s.title}</h3>
+            <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.6 }}>{s.desc}</p>
+          </TiltCard>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+// ─── PROJECTS ───
+function Projects({ t, accentHue, accentHue2 }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  const c2 = `oklch(0.65 0.2 ${accentHue2})`;
+  return (
+    <Section id="projects">
+      <SectionTitle accentHue={accentHue}>{t.projectsTitle}</SectionTitle>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {t.projects.map((p, i) => (
+          <TiltCard key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 16, padding: '32px 36px', position: 'relative', overflow: 'hidden', cursor: 'default',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 8 }}>{p.title}</h3>
+                <p style={{ fontSize: 15, color: 'var(--text2)', lineHeight: 1.6 }}>{p.desc}</p>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {p.tags.map((tag, j) => (
+                  <span key={j} style={{
+                    fontFamily: 'var(--mono)', fontSize: 12, padding: '4px 12px',
+                    borderRadius: 100, background: j % 2 === 0 ? `${c1}15` : `${c2}15`,
+                    color: j % 2 === 0 ? c1 : c2, border: `1px solid ${j % 2 === 0 ? c1 : c2}22`,
+                  }}>{tag}</span>
+                ))}
+              </div>
+            </div>
+          </TiltCard>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+// ─── OPINIONS ───
+function Opinions({ t, accentHue }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  return (
+    <Section id="opinions">
+      <SectionTitle accentHue={accentHue}>{t.opinionsTitle}</SectionTitle>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+        {t.opinions.map((o, i) => (
+          <TiltCard key={i} style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 16, padding: 32, position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{ fontSize: 48, color: c1, opacity: 0.2, fontFamily: 'Georgia', lineHeight: 1, marginBottom: -12 }}>"</div>
+            <p style={{ fontSize: 15, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 20, fontStyle: 'italic' }}>{o.text}</p>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 15 }}>{o.author}</div>
+              <div style={{ fontSize: 13, color: 'var(--text2)' }}>{o.role}</div>
+            </div>
+          </TiltCard>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+// ─── CONTACT ───
+function Contact({ t, accentHue, accentHue2 }) {
+  const c1 = `oklch(0.65 0.2 ${accentHue})`;
+  const c2 = `oklch(0.65 0.2 ${accentHue2})`;
+  return (
+    <Section id="contact">
+      <SectionTitle accentHue={accentHue}>{t.contactTitle}</SectionTitle>
+      <TiltCard style={{
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: '48px 40px',
+        position: 'relative', overflow: 'hidden', textAlign: 'center', maxWidth: 600,
+      }}>
+        <p style={{ fontSize: 18, color: 'var(--text2)', marginBottom: 32 }}>{t.contactDesc}</p>
+        <a href="mailto:loksy0.a@gmail.com" style={{
+          display: 'inline-block', padding: '14px 36px', borderRadius: 10, fontWeight: 600, fontSize: 15,
+          background: `linear-gradient(135deg, ${c1}, ${c2})`,
+          color: '#fff', transition: 'transform 0.2s, box-shadow 0.2s',
+          boxShadow: `0 4px 24px ${c1}44`,
+        }}
+          onMouseEnter={e => { e.target.style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; }}
+        >{t.contactCta}</a>
+
+        <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 32 }}>
+          {[
+            { label: 'GitHub', href: 'https://github.com/Andrev0dev', icon: '◈' },
+            { label: 'Discord: andrev0', href: '#', icon: '◉' },
+            { label: 'loksy0.a@gmail.com', href: 'mailto:loksy0.a@gmail.com', icon: '◎' },
+          ].map((l, i) => (
+            <a key={i} href={l.href} target="_blank" rel="noopener" style={{
+              fontSize: 13, color: 'var(--text2)', fontFamily: 'var(--mono)',
+              display: 'flex', alignItems: 'center', gap: 6, transition: 'color 0.2s',
+            }}
+              onMouseEnter={e => e.currentTarget.style.color = c1}
+              onMouseLeave={e => e.currentTarget.style.color = 'var(--text2)'}
+            ><span style={{ color: c1 }}>{l.icon}</span> {l.label}</a>
+          ))}
+        </div>
+      </TiltCard>
+    </Section>
+  );
+}
+
+// ─── FOOTER ───
+function Footer({ t }) {
+  return (
+    <footer style={{
+      textAlign: 'center', padding: '32px 24px', fontSize: 13,
+      color: 'var(--text2)', borderTop: '1px solid var(--border)',
+    }}>{t.footer}</footer>
+  );
+}
+
+// ─── APP ───
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const mouse = useMouse();
+  const lang = tweaks.language;
+  const t = T[lang] || T.pl;
+  const h1 = tweaks.accentHue;
+  const h2 = tweaks.accentSecondaryHue;
+
+  const setLang = (l) => setTweak('language', l);
+
+  return (
+    <>
+      <GridBG visible={tweaks.gridVisible} accentHue={h1} />
+      <Particles count={tweaks.particleCount} mouse={mouse} hue1={h1} hue2={h2} />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <Nav t={t} lang={lang} setLang={setLang} accentHue={h1} />
+        <Hero t={t} mouse={mouse} accentHue={h1} accentHue2={h2} />
+        <About t={t} accentHue={h1} />
+        <Services t={t} accentHue={h1} accentHue2={h2} />
+        <Projects t={t} accentHue={h1} accentHue2={h2} />
+        <Opinions t={t} accentHue={h1} />
+        <Contact t={t} accentHue={h1} accentHue2={h2} />
+        <Footer t={t} />
+      </div>
+
+      <TweaksPanel>
+        <TweakSection title="Kolory">
+          <TweakSlider label="Akcent główny (hue)" value={h1} min={0} max={360} step={5} onChange={v => setTweak('accentHue', v)} />
+          <TweakSlider label="Akcent drugi (hue)" value={h2} min={0} max={360} step={5} onChange={v => setTweak('accentSecondaryHue', v)} />
+        </TweakSection>
+        <TweakSection title="Efekty 3D">
+          <TweakToggle label="Siatka tła" value={tweaks.gridVisible} onChange={v => setTweak('gridVisible', v)} />
+          <TweakSlider label="Ilość cząsteczek" value={tweaks.particleCount} min={0} max={60} step={5} onChange={v => setTweak('particleCount', v)} />
+        </TweakSection>
+        <TweakSection title="Język">
+          <TweakRadio label="Język" value={lang} options={['pl', 'en']} onChange={v => setTweak('language', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
